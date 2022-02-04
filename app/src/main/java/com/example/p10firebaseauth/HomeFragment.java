@@ -10,6 +10,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,10 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
+    Query getQuery() {
+        return FirebaseFirestore.getInstance().collection("posts").limit(50);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -48,11 +53,31 @@ public class HomeFragment extends Fragment {
                 navController.navigate(R.id.fragment_new_post);
             }
         });
+
+        view.findViewById(R.id.likeFragment).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.likeFragment);
+            }
+        });
+
+        view.findViewById(R.id.orderTimeButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
        // view.findViewById(R.id.fab).setVisibility(View.GONE);
 
         RecyclerView postsRecyclerView = view.findViewById(R.id.postsRecyclerView);
 
-        Query query = FirebaseFirestore.getInstance().collection("posts").limit(50);
+
+        Query query = getQuery();
+        //FirebaseFirestore.getInstance().collection("posts").limit(50);
+        //Query query = FirebaseFirestore.getInstance().collection("posts").orderBy("time", Query.Direction.DESCENDING);
+        //Query  query = FirebaseFirestore.getInstance().collection("posts").orderBy("likenum", Query.Direction.DESCENDING);
+
 
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
                 .setQuery(query, Post.class)
@@ -77,6 +102,7 @@ public class HomeFragment extends Fragment {
             Glide.with(getContext()).load(post.authorPhotoUrl).circleCrop().into(holder.authorPhotoImageView);
             holder.authorTextView.setText(post.author);
             holder.contentTextView.setText(post.content);
+            holder.timeTextView.setText(post.time);
 
             // Gestion de likes
             final String postKey = getSnapshots().getSnapshot(position).getId();
@@ -87,12 +113,18 @@ public class HomeFragment extends Fragment {
                 holder.likeImageView.setImageResource(R.drawable.like_off);
             holder.numLikesTextView.setText(String.valueOf(post.likes.size()));
             holder.likeImageView.setOnClickListener(view -> {
-                FirebaseFirestore.getInstance().collection("posts")
-                        .document(postKey)
-                        .update("likes."+uid, post.likes.containsKey(uid) ?
-                                FieldValue.delete() : true);
-            });
+                if(post.likes.containsKey(uid))
+                {
+                    FirebaseFirestore.getInstance().collection("posts").document(postKey).update( "likes."+uid , FieldValue.delete() );
+                    FirebaseFirestore.getInstance().collection("posts").document(postKey).update( "likenum", post.likenum - 1);
+                }
+                else
+                {
+                    FirebaseFirestore.getInstance().collection("posts").document(postKey).update("likes."+uid,  true);
+                    FirebaseFirestore.getInstance().collection("posts").document(postKey).update( "likenum", post.likenum + 1);
+                }
 
+            });
 
             // Miniatura de media
             if (post.mediaUrl != null) {
@@ -110,11 +142,14 @@ public class HomeFragment extends Fragment {
                 holder.mediaImageView.setVisibility(View.GONE);
             }
 
+            // Gestion de eliminar posts
+
+
         }
 
         class PostViewHolder extends RecyclerView.ViewHolder {
             ImageView authorPhotoImageView, likeImageView, mediaImageView;
-            TextView authorTextView, contentTextView, numLikesTextView;
+            TextView authorTextView, contentTextView, numLikesTextView,timeTextView;
 
             PostViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -125,6 +160,7 @@ public class HomeFragment extends Fragment {
                 authorTextView = itemView.findViewById(R.id.authorTextView);
                 contentTextView = itemView.findViewById(R.id.contentTextView);
                 numLikesTextView = itemView.findViewById(R.id.numLikesTextView);
+                timeTextView = itemView.findViewById(R.id.timeTextView);
 
             }
         }

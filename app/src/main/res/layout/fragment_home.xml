@@ -20,4 +20,22 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/pen" />
 
+
+    <Button
+        android:id="@+id/likeFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:text="Likes"
+        android:layout_margin="@dimen/fab_margin"
+        />
+
+    <Button
+        android:id="@+id/orderTimeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:text="Time" />
+
 </FrameLayout>

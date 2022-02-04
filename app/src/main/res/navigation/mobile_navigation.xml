@@ -30,6 +30,11 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
+        android:id="@+id/likeFragment"
+        android:name="com.example.p10firebaseauth.likeFragment"
+        android:label="fragment_like"
+        tools:layout="@layout/fragment_home" />
+    <fragment
         android:id="@+id/fragment_new_post"
         android:name="com.example.p10firebaseauth.NewPostFragment"
         android:label="fragment_new_post"
@@ -39,4 +44,5 @@
         android:name="com.example.p10firebaseauth.MediaFragment"
         android:label="fragment_media"
         tools:layout="@layout/fragment_media" />
+
 </navigation>

@@ -18,6 +18,7 @@ import androidx.navigation.Navigation;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 
@@ -104,9 +107,13 @@ public class NewPostFragment extends Fragment {
     }
     private void guardarEnFirestore(String postContent, String mediaUrl) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        Post post = new Post(user.getUid(), user.getDisplayName(),
-                (user.getPhotoUrl() != null ? user.getPhotoUrl().toString() :
-                        "R.drawable.user"), postContent, mediaUrl, mediaTipo);
+
+        Long datetime = System.currentTimeMillis();
+        Timestamp timestamp = new Timestamp(datetime);
+        String time = new SimpleDateFormat("MM/dd/yyyy HH:mm").format(timestamp);
+        //String time = DateFormat.format("dd/MM/yyyy hh:mm ")timestamp.toString();
+
+        Post post = new Post(user.getUid(), user.getDisplayName(), (user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "R.drawable.user"), postContent, mediaUrl, mediaTipo, time );
         FirebaseFirestore.getInstance().collection("posts")
                 .add(post)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -130,7 +137,7 @@ public class NewPostFragment extends Fragment {
         private void guardarEnFirestore(String postContent) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            Post post = new Post(user.getUid(), user.getDisplayName(), (user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null), postContent, null, null);
+            Post post = new Post(user.getUid(), user.getDisplayName(), (user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null), postContent, null, null,"XD");
 
             FirebaseFirestore.getInstance().collection("posts")
                     .add(post)

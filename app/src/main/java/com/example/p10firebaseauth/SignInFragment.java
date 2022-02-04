@@ -39,7 +39,7 @@ public class SignInFragment extends Fragment {
     private EditText emailEditText, passwordEditText;
     private Button emailSignInButton;
     private LinearLayout signInForm;
-    private ProgressBar signInProgressBar;
+    private ProgressBar signInProgressBar ;
     private FirebaseAuth mAuth;
     private SignInButton googleSignInButton;
     private ActivityResultLauncher<Intent> activityResultLauncher;
@@ -62,6 +62,8 @@ public class SignInFragment extends Fragment {
         signInForm = view.findViewById(R.id.signInForm);
         signInProgressBar = view.findViewById(R.id.signInProgressBar);
         mAuth = FirebaseAuth.getInstance();
+
+        signInProgressBar.setVisibility(View.GONE);
 
         view.findViewById(R.id.gotoCreateAccountTextView).setOnClickListener(new View.OnClickListener() {
             @Override
