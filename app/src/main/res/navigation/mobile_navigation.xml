@@ -35,6 +35,11 @@
         android:label="fragment_like"
         tools:layout="@layout/fragment_home" />
     <fragment
+        android:id="@+id/timeFragment"
+        android:name="com.example.p10firebaseauth.timeFragment"
+        android:label="fragment_time"
+        tools:layout="@layout/fragment_home" />
+    <fragment
         android:id="@+id/fragment_new_post"
         android:name="com.example.p10firebaseauth.NewPostFragment"
         android:label="fragment_new_post"

@@ -61,10 +61,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.orderTimeButton).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.timeFragment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+            navController.navigate(R.id.timeFragment);
             }
         });
 
